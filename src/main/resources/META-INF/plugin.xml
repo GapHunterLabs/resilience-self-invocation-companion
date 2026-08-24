@@ -1,0 +1,48 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <id>dev.gaphunter.resilienceselfinvocationcompanion</id>
+    <name>Resilience Self-Invocation Companion</name>
+    <vendor>Gap Hunter Labs</vendor>
+    <description><![CDATA[
+        <p>Warning icon on a call to a <code>@Retryable</code> (Spring
+        Retry) or <code>@CircuitBreaker</code>/<code>@Retry</code>/
+        <code>@RateLimiter</code>/<code>@Bulkhead</code>/<code>@TimeLimiter</code>
+        (Resilience4j) method made from another method of the
+        <b>same</b> declaring class. All of these are AOP-proxy-based,
+        the same mechanism as Spring's own <code>@Transactional</code>/
+        <code>@Cacheable</code>/<code>@Async</code>: self-invocation
+        bypasses the proxy entirely, so the resilience behavior is
+        silently never applied -- no retry, no circuit breaker, no rate
+        limit -- with no error and no warning. Confirmed real: neither
+        Spring Retry nor Resilience4j are covered by JetBrains
+        Ultimate's own Spring plugin (verified by inspecting its
+        bundled <code>plugin.xml</code>, which only registers this
+        check for <code>@Transactional</code>/<code>@Cacheable</code>/
+        <code>@Async</code>).</p>
+        <p><b>100% static PSI analysis</b> -- matches each annotation by
+        simple name, not by resolving the real classpath symbol, so it
+        works whether the real Spring Retry/Resilience4j jars are on
+        the classpath or not. Java and Kotlin.</p>
+        <p>Stated honestly: v0.1 only flags an unqualified or
+        <code>this.</code>-qualified call within the exact same class --
+        a call through an injected self-reference is correctly never
+        flagged, since it's qualified by a different expression.</p>
+        <p>Free. No license nags, no telemetry, no network calls.</p>
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.java</depends>
+    <depends>org.jetbrains.kotlin</depends>
+
+    <extensions defaultExtensionNs="org.jetbrains.kotlin">
+        <supportsKotlinPluginMode supportsK1="true" supportsK2="true"/>
+    </extensions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <codeInsight.lineMarkerProvider language="JAVA"
+            implementationClass="dev.gaphunter.resilienceselfinvocationcompanion.gutter.ResilienceSelfInvocationLineMarkerProvider"/>
+        <codeInsight.lineMarkerProvider language="kotlin"
+            implementationClass="dev.gaphunter.resilienceselfinvocationcompanion.gutter.ResilienceSelfInvocationLineMarkerProvider"/>
+        <notificationGroup id="Resilience Self-Invocation Companion" displayType="BALLOON"/>
+    </extensions>
+</idea-plugin>
