@@ -41,10 +41,12 @@ Open any Java/Kotlin class with a `@Retryable`/`@CircuitBreaker`/
 `@Retry`/`@RateLimiter`/`@Bulkhead`/`@TimeLimiter` method. A call to
 that method from elsewhere in the same class shows a warning icon.
 
-## Enterprise / Team Licensing
+## Support
 
-Need enterprise features, custom rules, or team licensing? Contact us at
-**gaphunterlabs@gmail.com**.
+- **Bugs and feature requests:** [GitHub Issues](https://github.com/GapHunterLabs/resilience-self-invocation-companion/issues)
+- **Questions, or custom rules for a team's codebase:** **gaphunterlabs@gmail.com**
+- **Security vulnerabilities:** report privately as described in [SECURITY.md](SECURITY.md), not in a public issue.
+- **Privacy and network behavior:** [PRIVACY.md](PRIVACY.md)
 
 ## Development
 
